@@ -41,10 +41,17 @@ Simulate for future years
 new_data <- data.frame("Year" = seq(2001, 2050, 1))
 
 preds <- predict(glm_model, newdata = new_data, type = 'response')
+
+plot(preds)
 ```
 
 http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/simRreg.pdf
 
+Time Series
 
+```{r}
+acf(whale)
+acf(whale$Population)
 
+```
 
