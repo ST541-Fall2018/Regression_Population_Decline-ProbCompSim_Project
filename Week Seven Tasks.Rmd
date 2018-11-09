@@ -1,0 +1,32 @@
+---
+title: "Week 7 Tasks"
+author: "Peter Boyd"
+date: "11/9/2018"
+output: html_document
+---
+
+I'm not sure how well my whale data will work. I think I may have more success with this monarch data that I found. 
+
+https://blog.nwf.org/2017/02/new-numbers-show-monarch-butterfly-populations-still-in-trouble/
+
+
+
+```{r}
+library(tidyverse)
+library(here)
+monarch <- read_csv(here("data", "monarch.csv"))
+monarch
+plot(monarch$Year, monarch$Acres, main = "Population Decline of Monarch Butterflies", xlab = "Year", ylab = "Hectacre Coverage")
+```
+
+```{r}
+monarch.ts <- as.ts(monarch$Acres)
+acf(monarch.ts)
+decompose(monarch.ts)
+```
+
+```{r}
+
+```
+
+
