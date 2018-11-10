@@ -9,6 +9,7 @@ I'm not sure how well my whale data will work. I think I may have more success w
 
 https://blog.nwf.org/2017/02/new-numbers-show-monarch-butterfly-populations-still-in-trouble/
 
+http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/simRreg.pdf
 
 
 ```{r}
@@ -22,7 +23,7 @@ plot(monarch$Year, monarch$Acres, main = "Population Decline of Monarch Butterfl
 ```{r}
 monarch.ts <- as.ts(monarch$Acres)
 acf(monarch.ts)
-decompose(monarch.ts)
+#decompose(monarch.ts)
 ```
 
 ```{r}
