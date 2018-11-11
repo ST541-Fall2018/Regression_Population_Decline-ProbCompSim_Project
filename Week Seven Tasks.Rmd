@@ -27,7 +27,28 @@ acf(monarch.ts)
 ```
 
 ```{r}
+pop.decline <- function(df, ntimes){
+  fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
+  n <- length(df$Population)
+  X <- cbind(rep(1, n), df$Year)
+  b <- coef(fit.poi)
+  y.hat <- exp(X %*% b)
+  
+  coefs <- matrix(ncol = 2, data = rep(0, ntimes*2))
+  y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+  for (i in 1: ntimes){
+    coefs[i, 1] <- summary(lm(y.rep[,i] ~ df$Year))$coefficients[1]
+    coefs[i, 2] <- summary(lm(y.rep[,i] ~ df$Year))$coefficients[2]
+  }
 
+  
+  new.fit <- colMeans(coefs)[1] + colMeans(coefs)[2]*seq(max(df$Year), max(df$Year) + 50 , 1)
+
+yr.extinct <- -colMeans(coefs)[1]/colMeans(coefs)[2]
+return(list(yr.extinct, colMeans(coefs)))
+}
+
+pop.decline(df = monarch, ntimes = 100)
 ```
 
 
