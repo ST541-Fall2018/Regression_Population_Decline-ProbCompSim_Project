@@ -30,7 +30,7 @@ Below, `pop.decline()` is function based on the poisson distribution.
 ```{r}
 pop.decline <- function(df, ntimes){
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
-  fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
+  #fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
   #find way to select based on min aic
   n <- length(df$Population)
   X <- cbind(rep(1, n), df$Year)
@@ -64,7 +64,7 @@ monarch <- read_csv(here("data", "monarch.csv"))
 monarch$Year <- monarch$Year - min(monarch$Year) + 1
 lm.fit <- lm(log(Population) ~ log(Year), data = monarch)
 nls.fit <- nls(Population ~ b0*Year^b1, 
-    data = monarch, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2])) su
+    data = monarch, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))
 
 
 ggplot(data = monarch, aes(x = Year, y = Population)) +
@@ -80,5 +80,14 @@ plot(predict(nls.fit))
 # approximate rate para as 1/mean(pred nls fit)
 x <- rexp(30, rate = 1/mean(predict(nls.fit)))
 plot(sort(x, decreasing = T))
+
+many.samples <- rexp(50*1000, rate = 1/mean(predict(nls.fit)))
+msdf <- matrix(ncol = 1000, data = many.samples, byrow = F)
+
+mins <- double(1000)
+for (i in 1: 1000){
+  mins[i] <- min(msdf[,i])  
+}
+sum(mins<0.01)/length(mins)
 ```
 
