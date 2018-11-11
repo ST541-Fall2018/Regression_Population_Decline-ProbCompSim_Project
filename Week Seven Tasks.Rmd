@@ -11,6 +11,10 @@ https://blog.nwf.org/2017/02/new-numbers-show-monarch-butterfly-populations-stil
 
 http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/simRreg.pdf
 
+Towards bottom of this page, nice graph. Should include several lines that each show a different fit of the data, offering comparisons into the types fo regression. 
+
+https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/
+
 
 ```{r}
 library(tidyverse)
@@ -20,11 +24,8 @@ monarch
 plot(monarch$Year, monarch$Acres, main = "Population Decline of Monarch Butterflies", xlab = "Year", ylab = "Hectacre Coverage")
 ```
 
-```{r}
-monarch.ts <- as.ts(monarch$Acres)
-acf(monarch.ts)
-#decompose(monarch.ts)
-```
+
+Below, `pop.decline()` is function based on the poisson distribution. 
 
 ```{r}
 pop.decline <- function(df, ntimes){
@@ -33,8 +34,8 @@ pop.decline <- function(df, ntimes){
   #find way to select based on min aic
   n <- length(df$Population)
   X <- cbind(rep(1, n), df$Year)
-  b <- coef(fit.nb)
-  y.hat <- exp(X %*% b)
+  b <- coef(fit.poi)
+  y.hat <- fit.poi$fitted.values #exp(X %*% b)
   
   coefs <- matrix(ncol = 3, data = rep(0, ntimes*3))
   y.rep <- matrix(ncol = ntimes, data = rpois(n*ntimes, y.hat))
@@ -52,17 +53,32 @@ return(list(colMeans(coefs)))
 }
 
 pop.decline(df = monarch, ntimes = 100)
+```
+
+
+Below is a nonlinear regression method. 
+
+
+```{r}
+monarch <- read_csv(here("data", "monarch.csv"))
+monarch$Year <- monarch$Year - min(monarch$Year) + 1
+lm.fit <- lm(log(Population) ~ log(Year), data = monarch)
+nls.fit <- nls(Population ~ b0*Year^b1, 
+    data = monarch, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2])) su
+
 
 ggplot(data = monarch, aes(x = Year, y = Population)) +
   geom_line() +
-  geom_smooth (aaa) +
+  geom_smooth (method = "nls",
+               formula = y ~ b0*x^b1, 
+    data = monarch, start = c(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2])) +
   #geom_smooth(method='glm',formula=y~x, family = "poisson") +
   labs(x = "Year", y = "Population")
+
+plot(predict(nls.fit))
+#looks exp, so use that as simulation aspect. 
+# approximate rate para as 1/mean(pred nls fit)
+x <- rexp(30, rate = 1/mean(predict(nls.fit)))
+plot(sort(x, decreasing = T))
 ```
-
-```{r, message=F, warning=F}
-library(MASS)
-
-```
-
 
