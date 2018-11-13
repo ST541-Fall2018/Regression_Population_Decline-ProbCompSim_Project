@@ -28,6 +28,17 @@ plot(monarch$Year, monarch$Acres, main = "Population Decline of Monarch Butterfl
 Below, `pop.decline()` is function based on the poisson distribution. 
 
 ```{r}
+
+# Need to make some changes. 
+# Add if statements to separate cts and discrete data
+# for discrete, we'll do classic glm, poi, nb, nls
+# for cts, we'll do classic glm, exp, beta
+# may be helpful to export:
+#   plot with each fit 
+#   aic values
+#   residual plots
+#   maybe make reco based on aic, subjective
+
 pop.decline <- function(df, ntimes){
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
   #fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
