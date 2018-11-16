@@ -1,0 +1,37 @@
+---
+title: "Week Eight Tasks"
+author: "Peter Boyd"
+date: "11/16/2018"
+output: html_document
+---
+
+```{r}
+# Add if statements to separate cts and discrete data
+# for discrete, we'll do classic glm, poi, nb, nls
+# for cts, we'll do classic glm, exp, beta
+# may be helpful to export:
+#   plot with each fit
+#   aic values
+#   residual plots
+#   maybe make reco based on aic, subjective
+```
+
+```{r}
+# Discrete (more common scenario)
+# glm, poi, nb, nls
+
+pop.decline.dis <- function(df, ntimes){
+  #The four model fits we'll focus on
+  glm.fit <- glm(df$Population ~ df$Year, data = df)
+  fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
+  fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
+  lm.fit <- lm(log(Population) ~ log(Year), data = df)
+  nls.fit <- nls(Population ~ b0*Year^b1, 
+    data = df, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))
+  #compare AIC
+  mods <- c("Linear Model", "Poisson", "Negative Binomial", "Non Linear Least Squares")
+  
+
+  
+```
+
