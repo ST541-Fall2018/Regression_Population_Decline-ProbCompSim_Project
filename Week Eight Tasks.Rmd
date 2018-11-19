@@ -61,11 +61,13 @@ pop.decline.dis <- function(df, ntimes){
   
   # do simulation for lowest aic
   best_model <- fits[[order(aics)[1]]]
-  ntimes <- 100
   n <- length(df$Population)
-  y.hat <- best_modeli$fitted.values
+  y.hat <- best_model$fitted.values
   if(order(aics)[1] == 1){
     y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+    #sim_plot <- plot(sort(y.rep, decreasing = TRUE))
+    
+    
   }
   else if(order(aics)[2] == 1){
     y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
@@ -121,10 +123,12 @@ pop.decline.dis(df = monarch, ntimes = 100)
 #this is basic structure, should incorporate into the function
 ntimes <- 100
 n <- length(whale$Population)
-X <- cbind(rep(1, n), whale$Year)
-b <- coef(fit.poi)
+#X <- cbind(rep(1, n), whale$Year)
+#b <- coef(fit.poi)
 y.hat <- fit.poi$fitted.values
 y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+s.y.rep <- y.rep[do.call(order, as.data.frame(y.rep, header = FALSE)),]
 
+}
 ```
 
