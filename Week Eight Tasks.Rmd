@@ -29,6 +29,7 @@ pop.decline.dis <- function(df, ntimes){
   glm.fit <- glm(df$Population ~ df$Year, data = df)
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
   fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
+  fits <- list(summary(glm.fit), summary(fit.poi), summary(fit.nb))
   lm.fit <- lm(log(Population) ~ log(Year), data = df)
   #nls.fit <- nls(Population ~ b0*Year^b1, 
     #data = df, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))
@@ -58,6 +59,22 @@ pop.decline.dis <- function(df, ntimes){
   resid.plot2 <- plot(fit.poi$residuals)
   resid.plot3 <- plot(fit.nb$residuals)
   
+  # do simulation for lowest aic
+  best_model <- fits[[order(aics)[1]]]
+  ntimes <- 100
+  n <- length(df$Population)
+  y.hat <- best_modeli$fitted.values
+  if(order(aics)[1] == 1){
+    y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+  }
+  else if(order(aics)[2] == 1){
+    y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+  }
+  else{
+    y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
+  }
+  
+  #return stuff
   structure(list(aic_summary))
   par(mfrow = c(2,2))
   return(list(plot1, resid.plot1, resid.plot2, resid.plot3))
@@ -92,9 +109,22 @@ pop.decline.dis <- function(df, ntimes){
   return(list(plot1))
   }
 }
+```
 
+```{r}
 pop.decline.dis(df = whale, ntimes = 100)
 pop.decline.dis(df = monarch, ntimes = 100)
+```
+
+```{r, eval = FALSE}
+#add simulation component
+#this is basic structure, should incorporate into the function
+ntimes <- 100
+n <- length(whale$Population)
+X <- cbind(rep(1, n), whale$Year)
+b <- coef(fit.poi)
+y.hat <- fit.poi$fitted.values
+y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))
 
 ```
 
