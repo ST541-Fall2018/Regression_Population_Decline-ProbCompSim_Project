@@ -7,8 +7,6 @@ output: html_document
 
 
 ```{r}
-#xx for discrete, we'll do classic glm, poi, nb, nls
-# may be helpful to export:
 library(tidyverse)
 library(here)
 library(MASS)
@@ -22,7 +20,7 @@ ringed_seal <- read_csv(here("data", "ringed_seal_finland.csv"))
 ```{r}
 
 pop.decline <- function(df, ntimes){
-  
+  df <- na.omit(df)
   glm.fit <- glm(df$Population ~ df$Year, data = df)
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
   fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
@@ -52,7 +50,7 @@ pop.decline <- function(df, ntimes){
                       ylab = "Residuals")
   
   # do simulation for lowest aic
-  n <- length(df$Population)
+  n <- max(df$Year) - min(df$Year) +1
   y.hat <- best_model$fitted.values
   
   if(order(aics)[1] == 2){
@@ -62,7 +60,7 @@ pop.decline <- function(df, ntimes){
                   theta = summary(fit.nb)$theta)))
   } else {
     new_data <- data.frame("Year" = seq(max(df$Year)+1, max(df$Year) + n*ntimes, 1))
-    preds <- predict(glm_model, newdata = new_data, type = 'response')
+    preds <- predict(glm.fit, newdata = new_data, type = 'response')
     preds <- preds + runif(n = n*ntimes, min = min(glm.fit$residuals), max =  
               max(glm.fit$residuals))
     y.rep <- matrix(ncol = ntimes, data = preds)
@@ -70,7 +68,6 @@ pop.decline <- function(df, ntimes){
     
   years <- c(min(df$Year):max(df$Year))
   y.rep.sort <- -apply(-y.rep, 2, sort)
-  #sim_reg <- apply(y.rep.sort, 2, lm())#problem!!!
   y.coefs <- t(apply(y.rep.sort, 2, function(y.col) lm(y.col~years)$coef))
   end.dates <- -y.coefs[,1] / y.coefs[,2]
   end.date <- cat("Predicted Extinction: ", mean(end.dates))
