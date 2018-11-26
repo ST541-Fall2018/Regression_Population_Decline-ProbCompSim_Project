@@ -6,10 +6,11 @@ output: html_document
 ---
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(here)
 library(MASS)
+library(broom)
 whale <- read_csv(here("data", "sperm_whale_pop.csv"))
 #monarch <- read_csv(here("data", "monarch.csv"))
 addax <- read_csv(here("data", "addax.csv"))
@@ -17,7 +18,7 @@ grizzly_ukraine <- read_csv(here("data", "grizzly_ukraine.csv"))
 ringed_seal <- read_csv(here("data", "ringed_seal_finland.csv"))
 ```
 
-```{r}
+```{r, echo = FALSE}
 
 pop.decline <- function(df, ntimes){
   df <- na.omit(df)
@@ -36,18 +37,6 @@ pop.decline <- function(df, ntimes){
                mods[2], ": ", aics[2], "\n",
                mods[3], ": ", aics[3], "\n")
   
-  #show plot with each model fit
-  plot1 <- ggplot(data = df, aes(x = Year, y = Population)) +
-  geom_point() +
-  geom_smooth(method='glm',formula=y~x, method.args = list(family = "poisson"), color
-      = "orange") +
-  geom_smooth(method='glm',formula=y~x, color = "purple") + 
-  geom_smooth(method='glm.nb',formula=y~x, color = "green")
-  labs(x = "Year", y = "Population")
-  
-  #show residual plot for lowest aic model
-  resid.plot1 <- plot(best_model$residuals, main = "Residual Plot for Best Model",
-                      ylab = "Residuals")
   
   # do simulation for lowest aic
   n <- max(df$Year) - min(df$Year) +1
@@ -71,25 +60,42 @@ pop.decline <- function(df, ntimes){
   y.coefs <- t(apply(y.rep.sort, 2, function(y.col) lm(y.col~years)$coef))
   end.dates <- -y.coefs[,1] / y.coefs[,2]
   end.date <- cat("Predicted Extinction: ", mean(end.dates))
-
+  
+  #show plot with each model fit
+  plot1 <- ggplot(data = df, aes(x = Year, y = Population)) +
+  geom_point() +
+  geom_smooth(method='glm',formula=y~x, method.args = list(family = "poisson"), 
+                 aes(color = "Poisson")) +
+  geom_smooth(method='glm',formula=y~x, aes(color = "Linear")) + 
+  geom_smooth(method='glm.nb',formula=y~x, aes(color = "Negative Binomial")) +
+  scale_colour_manual(name="legend", values=c("orange", "green", "purple")) +
+  labs(x = "Year", y = "Population")
+  
+  #show residual plot for lowest aic model
+  aug.best_model <- augment(best_model)
+  resid.plot1 <- ggplot(aug.best_model, aes(x = .fitted, y = .resid)) +
+    geom_point()
+  
   #return stuff
-  structure(list(aic_summary, end.date))
-  return(list(plot1, resid.plot1))
+  both_plots <- list(plot1, resid.plot1)
+  par(mfrow = c(1,2))
+  structure(list(aic_summary, end.date, both_plots))
+  #structure(list(plot1, resid.plot1))
 }
 ```
 
 
 ```{r}
 pop.decline(df = whale, ntimes = 100)
-pop.decline(df = addax, ntimes = 100)
-pop.decline(df = grizzly_ukraine, ntimes = 100)
-pop.decline(df = ringed_seal, ntimes = 100)
+# pop.decline(df = addax, ntimes = 100)
+# pop.decline(df = grizzly_ukraine, ntimes = 100)
+# pop.decline(df = ringed_seal, ntimes = 100)
 ```
 
 
 
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, include=FALSE}
 
   if(class(df$Population) == "numeric"){
     glm.fit <- glm(df$Population ~ df$Year, data = df)
@@ -132,7 +138,7 @@ pop.decline(df = ringed_seal, ntimes = 100)
 
 
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, include = FALSE}
 #add simulation component
 #this is basic structure, should incorporate into the function
 ntimes <- 100
