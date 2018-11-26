@@ -1,0 +1,64 @@
+---
+title: "Week Ten Tasks"
+author: "Peter Boyd"
+date: "11/25/2018"
+output: html_document
+---
+
+Need to compare timing of a few aspects within my function. 
+The apply method below is much faster. I had hoped to use the map function, but I don't think that the purrr package can do what I would need it to do in this situation (a by column operation for matricies). I found this discussion board that points to this conclusion:
+https://github.com/tidyverse/purrr/issues/341
+
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(MASS)
+library(broom)
+library(ggbeeswarm)
+whale <- read_csv(here("data", "sperm_whale_pop.csv"))
+ntimes <- 100
+
+# setup needed
+  df <- whale
+  fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
+  best_model <- fit.poi
+  n <- max(df$Year) - min(df$Year) +1
+  y.hat <- best_model$fitted.values
+  y.rep <- matrix(ncol = ntimes, data = c(rpois(n*ntimes, y.hat)))
+  years <- c(min(df$Year):max(df$Year))
+  
+# using apply 
+  apply_method <- function(df, best_model, n, y.hat, y.rep){
+  y.rep.sort <- -apply(-y.rep, 2, sort)
+  y.coefs <- t(apply(y.rep.sort, 2, function(y.col) lm(y.col~years)$coef))
+  end.dates <- -1* y.coefs[,1] / y.coefs[,2]
+  return(end.dates)
+  }
+  
+  apply_method(df, best_model, n, y.hat, y.rep)  
+
+  # using for loop
+  loop_method <- function(df, best_model, n, y.hat, y.rep){
+    end_dates <- double(ntimes)
+    for (i in 1:ntimes){
+      sim_reg <- lm(sort(y.rep[,i], decreasing = TRUE) ~
+                  years)
+      end_dates[i] <- -1*summary(sim_reg)$coefficients[1,1] /   
+         summary(sim_reg)$coefficients[2,1]
+    }
+    return(end_dates)
+  }
+  
+  loop_method(df, best_model, n, y.hat, y.rep)
+
+  times <- bench::mark(
+  apply_method(df, best_model, n, y.hat, y.rep), 
+  loop_method(df, best_model, n, y.hat, y.rep)
+)
+times
+plot(times)
+
+```
+
