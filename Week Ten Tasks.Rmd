@@ -9,7 +9,7 @@ Need to compare timing of a few aspects within my function.
 The apply method below is much faster. I had hoped to use the map function, but I don't think that the purrr package can do what I would need it to do in this situation (a by column operation for matricies). I found this discussion board that points to this conclusion:
 https://github.com/tidyverse/purrr/issues/341
 
-
+As a result I implemented apply in my code. 
 
 ```{r}
 library(tidyverse)
