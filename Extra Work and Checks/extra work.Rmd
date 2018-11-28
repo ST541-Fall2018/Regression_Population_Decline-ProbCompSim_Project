@@ -1,0 +1,33 @@
+---
+title: "extra  work"
+author: "Peter Boyd"
+date: "11/28/2018"
+output: html_document
+---
+
+
+```{r, fig.height=3, fig.width=3}
+library(tidyverse)
+all <- function(){
+print_plots <- function(x, y){
+    par(mfrow = c(2,2))
+      print(x)
+      print(y)
+  }
+
+u <- c(1:10)
+v <- rpois(10,3)
+w <- rpois(10,5)
+df <- data.frame(u,v)
+plot1 <- ggplot(df, aes(x = u, y = v)) + 
+  geom_point()
+plot2 <- ggplot(df, aes(x = u, y = w)) + 
+  geom_point()
+
+#print_plots(plot1, plot2)
+return(list(print_plots(plot1, plot2)))
+}
+
+all()[[1:2]]
+```
+
