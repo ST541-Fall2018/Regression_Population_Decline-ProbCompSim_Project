@@ -1,0 +1,104 @@
+---
+title: "Week 7 Tasks"
+author: "Peter Boyd"
+date: "11/9/2018"
+output: html_document
+---
+
+I'm not sure how well my whale data will work. I think I may have more success with this monarch data that I found. 
+
+https://blog.nwf.org/2017/02/new-numbers-show-monarch-butterfly-populations-still-in-trouble/
+
+http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/simRreg.pdf
+
+Towards bottom of this page, nice graph. Should include several lines that each show a different fit of the data, offering comparisons into the types fo regression. 
+
+https://stats.idre.ucla.edu/r/dae/negative-binomial-regression/
+
+
+```{r}
+library(tidyverse)
+library(here)
+monarch <- read_csv(here("data", "monarch.csv"))
+monarch
+plot(monarch$Year, monarch$Acres, main = "Population Decline of Monarch Butterflies", xlab = "Year", ylab = "Hectacre Coverage")
+```
+
+
+Below, `pop.decline()` is function based on the poisson distribution. 
+
+```{r}
+
+# Need to make some changes. 
+# Add if statements to separate cts and discrete data
+# for discrete, we'll do classic glm, poi, nb, nls
+# for cts, we'll do classic glm, exp, beta
+# may be helpful to export:
+#   plot with each fit 
+#   aic values
+#   residual plots
+#   maybe make reco based on aic, subjective
+
+pop.decline <- function(df, ntimes){
+  fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
+  #fit.nb <- glm.nb(df$Population ~ df$Year, data = df)
+  #find way to select based on min aic
+  n <- length(df$Population)
+  X <- cbind(rep(1, n), df$Year)
+  b <- coef(fit.poi)
+  y.hat <- fit.poi$fitted.values #exp(X %*% b)
+  
+  coefs <- matrix(ncol = 3, data = rep(0, ntimes*3))
+  y.rep <- matrix(ncol = ntimes, data = rpois(n*ntimes, y.hat))
+  for (i in 1: ntimes){
+    coefs[i, 1] <- summary(lm(y.rep[,i] ~ df$Year))$coefficients[1]
+    coefs[i, 2] <- summary(lm(y.rep[,i] ~ df$Year))$coefficients[2]
+    coefs[i, 3] <- summary(lm(y.rep[,i] ~ df$Year))$coefficients[3]
+  }
+
+  
+  new.fit <- colMeans(coefs)[1] + colMeans(coefs)[2]*seq(max(df$Year), max(df$Year) + 50 , 1) + colMeans(coefs)[3]*I(seq(max(df$Year), max(df$Year) + 50 , 1))^2
+return(list(colMeans(coefs)))
+#yr.extinct <- -colMeans(coefs)[1]/colMeans(coefs)[2]
+#return(list(yr.extinct, colMeans(coefs)))
+}
+
+pop.decline(df = monarch, ntimes = 100)
+```
+
+
+Below is a nonlinear regression method. 
+
+
+```{r}
+monarch <- read_csv(here("data", "monarch.csv"))
+df$Year <- df$Year - min(df$Year) + 1
+lm.fit <- lm(log(Population) ~ log(Year), data = df)
+nls.fit <- nls(Population ~ b0*Year^b1, 
+    data = df, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))
+
+
+ggplot(data = monarch, aes(x = Year, y = Population)) +
+  geom_point() +
+  # geom_smooth (method = "nls",
+  #              formula = y ~ b0*x^b1, 
+  #   data = monarch, start = c(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2])) +
+  geom_smooth(method='glm',formula=y~x, family = "poisson") +
+  labs(x = "Year", y = "Population")
+
+plot(predict(nls.fit))
+#looks exp, so use that as simulation aspect. 
+# approximate rate para as 1/mean(pred nls fit)
+x <- rexp(30, rate = 1/mean(predict(nls.fit)))
+plot(sort(x, decreasing = T))
+
+many.samples <- rexp(50*1000, rate = 1/mean(predict(nls.fit)))
+msdf <- matrix(ncol = 1000, data = many.samples, byrow = F)
+
+mins <- double(1000)
+for (i in 1: 1000){
+  mins[i] <- min(msdf[,i])  
+}
+sum(mins<0.01)/length(mins)
+```
+
