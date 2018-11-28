@@ -315,8 +315,14 @@ $(document).ready(function () {
 
 
 <p>Name: Peter Boyd</p>
-<p>Project Title: Simulating Population Decline of Endangered Species</p>
-<p>Description: In this project, I will fit regression models and time series models based on historical population estimates of polar bears. Via simulation, I predict future decay and future population estimates, eventually leading to a prediction of when the species may become extinct.</p>
+<p>Project Title: Modeling Population Decline of Endangered Species</p>
+<p>Description: In this project, I model the population decline of endangered species and predict when the species may become extinct. This is done via a function that performs the following steps:</p>
+<pre><code>1) Fits several different models
+2) Selects the best model by comparing AIC values
+3) Using fitted values from the best model, simulate many versions of new data
+4) Refit glm's, using original year values and simulated population
+5) Average fits, roughly estimate when population is zero
+5) Show graphically the fit of various models and the residual plot of best model</code></pre>
 
 
 

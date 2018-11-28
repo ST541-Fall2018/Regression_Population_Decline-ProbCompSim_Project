@@ -10,7 +10,7 @@ Name: Peter Boyd
 Project Title: Modeling Population Decline of Endangered Species
 
 Description: In this project, I model the population decline of endangered species and predict when the species may become extinct. This is done via a function that performs the following steps:
-
+    
     1) Fits several different models
     2) Selects the best model by comparing AIC values
     3) Using fitted values from the best model, simulate many versions of new data
