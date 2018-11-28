@@ -3,9 +3,9 @@ title: "Modeling Population Decline of Endangered Species"
 author: "Peter Boyd"
 date: "11/26/2018"
 output:
-  ioslides_presentation: default
-  slidy_presentation: default
   beamer_presentation: default
+  slidy_presentation: default
+  ioslides_presentation: default
 subtitle: 'Link to Git repo: https://github.com/ST541-Fall2018/boydpe-project-populationdecline'
 --- 
 
@@ -82,7 +82,14 @@ pop.decline <- function(df, ntimes){
   geom_smooth(method='glm',formula=y~x, aes(color = "Linear")) + 
   geom_smooth(method='glm.nb',formula=y~x, aes(color = "Neg.Bi")) +
   #geom_smooth(method='glm',formula=y~log(x), aes(color = "Log.Trans")) +
-  scale_colour_manual(name="legend", values=c("orange", "green", "purple", "yellow"))   + labs(x = "Year", y = "Population")
+  scale_colour_manual(name="legend", values=c("orange", "green", "purple")) +
+  theme(legend.position="bottom") + 
+  #theme(legend.position = c(1,1)) +
+  theme(legend.text = element_text(size = 5)) + 
+  theme(legend.title = element_text(size = 8)) +
+  guides(fill=guide_legend(title="Model")) + 
+  scale_x_continuous(limits = c(round(min(df$Year)), round(max(df$Year)))) + 
+  labs(x = "Year", y = "Population")
   
   #show residual plot for lowest aic model
   aug.best_model <- augment(best_model)
@@ -118,7 +125,7 @@ pop.decline <- function(df, ntimes){
 
 ## Example for Whale data set
 
-```{r, echo=FALSE, fig.height=3.8, fig.width=4}
+```{r, echo=FALSE, fig.height=2.5, fig.width=2.4}
 out <- pop.decline(df = whale, ntimes = 100)
 out
 #out$aic_summary
@@ -131,7 +138,7 @@ out
 
 ## Example for Addax data set
 
-```{r, echo=FALSE, message = FALSE, warning=FALSE, fig.height=3.8, fig.width=4}
+```{r, echo=FALSE, message = FALSE, warning=FALSE, fig.height=2.5, fig.width=2.4}
 pop.decline(df = addax, ntimes = 100)
 ```
 
