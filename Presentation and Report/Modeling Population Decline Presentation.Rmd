@@ -145,7 +145,7 @@ pop.decline(df = addax, ntimes = 100)
 ## Ideas for Future Work
 
 - Could add complexity to model by considering a carrying capacity variable in the function
-- Attempted to iteratively predict new values until population is extinct
+- Attempted to iteratively predict new values until population is extinct, but population kept converging to a nonzero count
 
 - Questions?
 
