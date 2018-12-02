@@ -2,7 +2,9 @@
 title: "Week Ten Tasks"
 author: "Peter Boyd"
 date: "11/25/2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 Need to compare timing of a few aspects within my function. 
@@ -11,12 +13,15 @@ https://github.com/tidyverse/purrr/issues/341
 
 As a result I implemented apply in my code. 
 
-```{r}
+```{r, message=FALSE, warning = FALSE}
 library(tidyverse)
 library(here)
 library(MASS)
 library(broom)
 library(ggbeeswarm)
+```
+
+```{r}
 whale <- read_csv(here("data", "sperm_whale_pop.csv"))
 ntimes <- 100
 
