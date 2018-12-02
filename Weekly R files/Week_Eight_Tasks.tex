@@ -1,0 +1,402 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Week Eight Tasks},
+            pdfauthor={Peter Boyd},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Week Eight Tasks}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Peter Boyd}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{11/16/2018}
+
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Add if statements to separate cts and discrete data}
+\CommentTok{#xx for discrete, we'll do classic glm, poi, nb, nls}
+\CommentTok{# for cts, we'll do classic glm, exp, beta}
+\CommentTok{# may be helpful to export:}
+\CommentTok{#   plot with each fit}
+\CommentTok{#xx   aic values}
+\CommentTok{#   residual plots}
+\CommentTok{#   maybe make reco based on aic, subjective}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages ------------------- tidyverse 1.2.1 --
+\end{verbatim}
+
+\begin{verbatim}
+## √ ggplot2 3.0.0     √ purrr   0.2.5
+## √ tibble  1.4.2     √ dplyr   0.7.6
+## √ tidyr   0.8.1     √ stringr 1.3.1
+## √ readr   1.1.1     √ forcats 0.3.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ---------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(here)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## here() starts at /cloud/project
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(MASS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'MASS'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{whale <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"sperm_whale_pop.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   Year = col_integer(),
+##   Population = col_integer()
+## )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{monarch <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"monarch.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   Year = col_integer(),
+##   Population = col_double()
+## )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#if(class(df$Population) == "integer")\{}
+
+\NormalTok{pop.decline.dis <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df, ntimes)\{}
+  
+\NormalTok{  glm.fit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population }\OperatorTok{~}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{data =}\NormalTok{ df)}
+\NormalTok{  fit.poi <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population }\OperatorTok{~}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{family =} \StringTok{"poisson"}\NormalTok{)}
+\NormalTok{  fit.nb <-}\StringTok{ }\KeywordTok{glm.nb}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population }\OperatorTok{~}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{data =}\NormalTok{ df)}
+\NormalTok{  fits <-}\StringTok{ }\KeywordTok{list}\NormalTok{((glm.fit), (fit.poi), (fit.nb))}
+\NormalTok{  lm.fit <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{log}\NormalTok{(Population) }\OperatorTok{~}\StringTok{ }\KeywordTok{log}\NormalTok{(Year), }\DataTypeTok{data =}\NormalTok{ df)}
+  \CommentTok{#nls.fit <- nls(Population ~ b0*Year^b1, }
+    \CommentTok{#data = df, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))}
+  
+  \CommentTok{#compare AIC}
+\NormalTok{  mods <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Linear Model"}\NormalTok{, }\StringTok{"Poisson"}\NormalTok{, }\StringTok{"Negative Binomial"}\NormalTok{)}
+\NormalTok{  aics <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{summary}\NormalTok{(glm.fit)}\OperatorTok{$}\NormalTok{aic, }\KeywordTok{summary}\NormalTok{(fit.poi)}\OperatorTok{$}\NormalTok{aic, }\KeywordTok{summary}\NormalTok{(fit.nb)}\OperatorTok{$}\NormalTok{aic)}
+  \CommentTok{#aic_summary <- cat(mods, "\textbackslash{}n", aics)}
+\NormalTok{  aic_summary <-}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{"AIC for Each Model"}\NormalTok{, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+\NormalTok{               mods[}\DecValTok{1}\NormalTok{], }\StringTok{": "}\NormalTok{, aics[}\DecValTok{1}\NormalTok{], }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }
+\NormalTok{               mods[}\DecValTok{2}\NormalTok{], }\StringTok{": "}\NormalTok{, aics[}\DecValTok{2}\NormalTok{], }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+\NormalTok{               mods[}\DecValTok{3}\NormalTok{], }\StringTok{": "}\NormalTok{, aics[}\DecValTok{3}\NormalTok{], }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  
+  \CommentTok{#show plot with each model fit}
+\NormalTok{  plot1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Year, }\DataTypeTok{y =}\NormalTok{ Population)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\CommentTok{#geom_smooth (method = "nls",}
+\StringTok{   }\CommentTok{#            formula = y ~ b0*x^b1, }
+\StringTok{    }\CommentTok{#data = monarch, start = c(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]), color = "yellow") +}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{'glm'}\NormalTok{,}\DataTypeTok{formula=}\NormalTok{y}\OperatorTok{~}\NormalTok{x, }\DataTypeTok{method.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{family =} \StringTok{"poisson"}\NormalTok{), }\DataTypeTok{color =} \StringTok{"orange"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{'glm'}\NormalTok{,}\DataTypeTok{formula=}\NormalTok{y}\OperatorTok{~}\NormalTok{x, }\DataTypeTok{color =} \StringTok{"purple"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{'glm.nb'}\NormalTok{,}\DataTypeTok{formula=}\NormalTok{y}\OperatorTok{~}\NormalTok{x, }\DataTypeTok{color =} \StringTok{"green"}\NormalTok{)}
+  \KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Year"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Population"}\NormalTok{)}
+  
+  \CommentTok{#show residual plots}
+\NormalTok{  resid.plot1 <-}\StringTok{ }\KeywordTok{plot}\NormalTok{(glm.fit}\OperatorTok{$}\NormalTok{residuals)}
+\NormalTok{  resid.plot2 <-}\StringTok{ }\KeywordTok{plot}\NormalTok{(fit.poi}\OperatorTok{$}\NormalTok{residuals)}
+\NormalTok{  resid.plot3 <-}\StringTok{ }\KeywordTok{plot}\NormalTok{(fit.nb}\OperatorTok{$}\NormalTok{residuals)}
+  
+  \CommentTok{# do simulation for lowest aic}
+\NormalTok{  best_model <-}\StringTok{ }\NormalTok{fits[[}\KeywordTok{order}\NormalTok{(aics)[}\DecValTok{1}\NormalTok{]]]}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population)}
+\NormalTok{  y.hat <-}\StringTok{ }\NormalTok{best_model}\OperatorTok{$}\NormalTok{fitted.values}
+  \CommentTok{#if(order(aics)[1] == 1)\{}
+\NormalTok{    y.rep <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =}\NormalTok{ ntimes, }\DataTypeTok{data =} \KeywordTok{c}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(n}\OperatorTok{*}\NormalTok{ntimes, y.hat)))}
+\NormalTok{    years <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(df}\OperatorTok{$}\NormalTok{Year)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(df}\OperatorTok{$}\NormalTok{Year))}
+    
+\NormalTok{    end_dates <-}\StringTok{ }\KeywordTok{double}\NormalTok{(ntimes)}
+    \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{ntimes)\{}
+\NormalTok{      sim_reg <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{sort}\NormalTok{(y.rep[,i], }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{~}
+\StringTok{                  }\NormalTok{years)}
+    
+\NormalTok{      end_dates[i] <-}\StringTok{ }\DecValTok{-1}\OperatorTok{*}\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{   }
+\StringTok{         }\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{]}
+\NormalTok{    \}}
+\NormalTok{    end_date <-}\StringTok{ }\KeywordTok{cat}\NormalTok{(}\StringTok{"Predicted Extinction: "}\NormalTok{, }\KeywordTok{mean}\NormalTok{(end_dates))}
+    
+    
+  \CommentTok{# \}}
+  \CommentTok{# else if(order(aics)[2] == 1)\{}
+  \CommentTok{#   y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))}
+  \CommentTok{# \}}
+  \CommentTok{# else\{}
+  \CommentTok{#   y.rep <- matrix(ncol = ntimes, data = rep(rpois(n*ntimes, y.hat)))}
+  \CommentTok{# \}}
+  
+  \CommentTok{#return stuff}
+  \KeywordTok{structure}\NormalTok{(}\KeywordTok{list}\NormalTok{(aic_summary, end_date))}
+  \CommentTok{#structure(list("Predicted Extinction Date: ", end_date))}
+  \CommentTok{#par(mfrow = c(2,2))}
+  \CommentTok{#structure(list("predicted extinction: " , end_date))}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(plot1, resid.plot1, resid.plot2, resid.plot3))}
+  \CommentTok{#structure(list("Predicted Extinction Date: ", end_date))}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{class}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population) }\OperatorTok{==}\StringTok{ "numeric"}\NormalTok{)\{}
+\NormalTok{    glm.fit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population }\OperatorTok{~}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{data =}\NormalTok{ df)}
+\NormalTok{    fit.exp <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(df}\OperatorTok{$}\NormalTok{Population }\OperatorTok{~}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{Year, }\DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{family =} \StringTok{"Gamma"}\NormalTok{)}
+    \CommentTok{#fit.beta <- glm(df$Population ~ df$Year, data = df, family = "beta")}
+    
+\NormalTok{    lm.fit <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{log}\NormalTok{(Population) }\OperatorTok{~}\StringTok{ }\KeywordTok{log}\NormalTok{(Year), }\DataTypeTok{data =}\NormalTok{ df)}
+    \CommentTok{#nls.fit <- nls(Population ~ b0*Year^b1, }
+    \CommentTok{#data = df, start = list(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]))}
+  
+  \CommentTok{#compare AIC}
+\NormalTok{  mods <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Linear Model"}\NormalTok{, }\StringTok{"Exponential"}\NormalTok{, }\StringTok{"Nonlinear Least Squares"}\NormalTok{)}
+\NormalTok{  aics <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{summary}\NormalTok{(glm.fit)}\OperatorTok{$}\NormalTok{aic, }\KeywordTok{summary}\NormalTok{(fit.exp)}\OperatorTok{$}\NormalTok{aic)}\CommentTok{#, summary(nls.fit)$aic)}
+\NormalTok{  aic_summary <-}\StringTok{ }\KeywordTok{cat}\NormalTok{(mods, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, aics)}
+  
+  \CommentTok{#show plot with each model fit}
+\NormalTok{  plot1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Year, }\DataTypeTok{y =}\NormalTok{ Population)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\CommentTok{# geom_smooth (method = "nls",}
+\StringTok{  }\CommentTok{#             formula = y ~ b0*x^b1, }
+\StringTok{  }\CommentTok{#   data = monarch, start = c(b0 = exp(coef(lm.fit)[1]), b1 = coef(lm.fit)[2]), color = "yellow") +}
+\StringTok{  }\CommentTok{#geom_smooth(method='glm',formula=y~x, method.args = list(family = "Gamma"), color = "orange") +}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{'glm'}\NormalTok{,}\DataTypeTok{formula=}\NormalTok{y}\OperatorTok{~}\NormalTok{x, }\DataTypeTok{color =} \StringTok{"purple"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\CommentTok{#geom_smooth(method='glm.nb',formula=y~x, color = "green")}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Year"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Population"}\NormalTok{) }
+  
+  \CommentTok{#simulation}
+\NormalTok{  y.hat <-}\StringTok{ }\NormalTok{fit.poi}\OperatorTok{$}\NormalTok{fitted.values}
+\NormalTok{  y.rep <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =}\NormalTok{ ntimes, }\DataTypeTok{data =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(n}\OperatorTok{*}\NormalTok{ntimes, y.hat)))}
+\NormalTok{  sim_reg <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{sort}\NormalTok{(y.rep[,}\DecValTok{100}\NormalTok{], }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{~}
+\StringTok{                  }\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(whale}\OperatorTok{$}\NormalTok{Year)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(df}\OperatorTok{$}\NormalTok{Year)))}
+\NormalTok{  end_date <-}\StringTok{ }\DecValTok{-1}\OperatorTok{*}\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{   }
+\StringTok{    }\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{]}
+  
+  \KeywordTok{structure}\NormalTok{(}\KeywordTok{list}\NormalTok{(aic_summary))}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(plot1))}
+\NormalTok{  \}}
+\ErrorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pop.decline.dis}\NormalTok{(}\DataTypeTok{df =}\NormalTok{ whale, }\DataTypeTok{ntimes =} \DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## AIC for Each Model 
+##  Linear Model :  698.5794 
+##  Poisson :  53225.4 
+##  Negative Binomial :  697.0227
+\end{verbatim}
+
+\includegraphics{Week_Eight_Tasks_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{Week_Eight_Tasks_files/figure-latex/unnamed-chunk-4-2.pdf}
+\includegraphics{Week_Eight_Tasks_files/figure-latex/unnamed-chunk-4-3.pdf}
+
+\begin{verbatim}
+## Predicted Extinction:  2600.77
+\end{verbatim}
+
+\begin{verbatim}
+## [[1]]
+\end{verbatim}
+
+\includegraphics{Week_Eight_Tasks_files/figure-latex/unnamed-chunk-4-4.pdf}
+
+\begin{verbatim}
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#pop.decline.dis(df = monarch, ntimes = 100)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#add simulation component}
+\CommentTok{#this is basic structure, should incorporate into the function}
+\NormalTok{ntimes <-}\StringTok{ }\DecValTok{100}
+\NormalTok{n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(whale}\OperatorTok{$}\NormalTok{Population)}
+\CommentTok{#X <- cbind(rep(1, n), whale$Year)}
+\CommentTok{#b <- coef(fit.poi)}
+\NormalTok{y.hat <-}\StringTok{ }\NormalTok{fit.poi}\OperatorTok{$}\NormalTok{fitted.values}
+\NormalTok{y.rep <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =}\NormalTok{ ntimes, }\DataTypeTok{data =} \KeywordTok{rep}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(n}\OperatorTok{*}\NormalTok{ntimes, y.hat)))}
+\NormalTok{s.y.rep <-}\StringTok{ }\NormalTok{y.rep[}\KeywordTok{do.call}\NormalTok{(order, }\KeywordTok{as.data.frame}\NormalTok{(y.rep, }\DataTypeTok{header =} \OtherTok{FALSE}\NormalTok{)),]}
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{sort}\NormalTok{(s.y.rep[,}\DecValTok{100}\NormalTok{], }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{))}
+\NormalTok{sim_reg <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{sort}\NormalTok{(y.rep[,}\DecValTok{100}\NormalTok{], }\DataTypeTok{decreasing =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{~}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(whale}\OperatorTok{$}\NormalTok{Year)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(df}\OperatorTok{$}\NormalTok{Year)))}
+\NormalTok{end_date <-}\StringTok{ }\DecValTok{-1}\OperatorTok{*}\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{] }\OperatorTok{/}\StringTok{ }\KeywordTok{summary}\NormalTok{(sim_reg)}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{] }
+
+\ErrorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

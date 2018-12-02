@@ -128,11 +128,6 @@ pop.decline <- function(df, ntimes){
 ```{r, echo=FALSE, fig.height=2.5, fig.width=2.4}
 out <- pop.decline(df = whale, ntimes = 100)
 out
-#out$aic_summary
-#print(out$plot1)
-# {par(mfrow = c(1,2))
-# print(pop.decline(df = whale, ntimes = 100)[[3]])
-# print(pop.decline(df = whale, ntimes = 100)[[4]])}
 ```
 
 

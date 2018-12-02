@@ -5,23 +5,24 @@ date: "11/27/2018"
 output:
   pdf_document: default
   html_document: default
+urlcolor: blue
 ---
 
 ## Abstract
 
-As species around the globe face declining populations, it is pertinent to model these endangered species. Through regression and simulation techniques, we may consider when these species may become extinct at the current rate of change with no preventative measures taken. In this report, I will discuss framework and data used, function creation and output, an example of my function at work, and possible future work. 
+As species around the globe face declining populations, it is pertinent to model these endangered species. Through regression and simulation techniques, we may consider when these species may become extinct at the current rate of change with no preventative measures taken. In this report, I will discuss framework and data used, function creation and output, two examples of my function at work, and possible future work. 
 
 ## Framework and Data
 
-My goal for this poject is to create a function that selects the best fitting model a particular data set and uses this fit to simulate data and predict an eventual point of extinction for the species. 
+My goal for this poject is to create a function that selects the best fitting model for a particular data set, use this fit to simulate data, and predict an eventual point of extinction for the species. 
 
-All of the data used in this project was downloaded from ____, a website that contains information for many species counts at various locations, some of which are population totals, which will be the data chosen for my analysis. 
+All of the data used in this project was downloaded from the [Living Planet Index Data Portal](http://www.livingplanetindex.org/data_portal), a website that contains information for many species counts at various locations around the world. Some data sets are population totals, which will be the data chosen for my analysis. 
 
 ## Function Creation and Output
 
 The function will have quite a few sections in order to fully implement all of the desired operations.
 
-First, the the function fits several models to the data. Due to their frequent use in discrete glm scenarios, the function will fit generalized linear models with specified distributions Gaussian, Negative Binomial, and Poisson. That is, the models are called as 
+First, the the function fits several models to the data. Due to thte population counts being discrete data, the function will fit generalized linear models with specified distributions Gaussian, Negative Binomial, and Poisson. That is, the models are called as 
 
 ```{r, eval=FALSE, include=TRUE}
 glm(Population ~ Year, data = df)
@@ -31,13 +32,13 @@ glm(Population ~ Year, data = df, family = "poisson")
 
 Once these models have been fit, the Akaike Information Criterion is assessed for each model, and the best fitting model is selected as the model producing the lowest AIC value. 
 
-Once the best model has been selected, the function will simiulate data based using the fitted values (and other parameters if the distribution requires them) from the best model. Once many simulations have been created, they are used to fit new models. Finally, after fitting many new models, the model parameters are averged  to produce an overall simulated model. 
+Once the best model has been selected, the function will simulate data using the fitted values (and other parameters if the distribution requires them) from the best model. Once many simulations have been created, they are used to fit new models. Finally, after fitting many new models, the model parameters are averged  to produce an overall simulated model. 
 
 The predicted extinction date can be found by solving the general regression equation: 
-$$\hat{y} = \beta_0 + \beta_1x$$
+$$\hat{y} = \hat{\beta_0} + \hat{\beta_1}x$$
 for $\hat{y} = 0$; so, the predicted date at which the population is extinct can be approximated by 
 
-$$\text{Predicted Extinction Date} = \frac{-\beta_0}{\beta_1}$$. 
+$$\text{Predicted Extinction Date} = \frac{-\hat{\beta_0}}{\hat{\beta_1}}$$. 
 
 Finally, the function will return each fitted model's AIC, the predicted extinction date from the best fitting model, a plot with each model depcited, and a residual plot for the best model. 
 
@@ -48,7 +49,7 @@ In order to demonstrate the usefulness of my function, I will produce an example
 
 ```{r, echo = FALSE, warning=FALSE, message = FALSE}
 pop.decline <- function(df, ntimes){
-  #fit several models
+  #Fit several models
   df <- na.omit(df)
   fit.glm <- glm(df$Population ~ df$Year, data = df)
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
@@ -56,23 +57,23 @@ pop.decline <- function(df, ntimes){
   fits <- list((fit.glm), (fit.poi), (fit.nb))
   #####
   
-  #compare AIC
+  #Compare AIC
   mods <- c("Linear Model", "Poisson", "Negative Binomial")
   aics <- c(summary(fit.glm)$aic, summary(fit.poi)$aic, summary(fit.nb)$aic)
-  best_model <- fits[[order(aics)[1]]]
-  aic_summary <- cat("AIC for Each Model", "\n",
+  best.model <- fits[[order(aics)[1]]]
+  aic.summary <- cat("AIC for Each Model", "\n",
                      mods[1], ": ", aics[1], "\n", 
                      mods[2], ": ", aics[2], "\n",
                      mods[3], ": ", aics[3], "\n")
   #####
   
-  # do simulation for lowest aic
-  # first, select best model and simulate accordingly
-  # then, fit models to each simulation
-  # finally, average the models to obtain an approximate 
-  # estimate of extinction date
+  # Do simulation for lowest aic
+  # First, select best model and simulate accordingly
+  # Then, fit models to each simulation
+  # Finally, average the models to obtain an approximate 
+  # Estimate of extinction date
   n <- max(df$Year) - min(df$Year) +1
-  y.hat <- best_model$fitted.values
+  y.hat <- best.model$fitted.values
   
   if(order(aics)[1] == 2){
     y.rep <- matrix(ncol = ntimes, data = c(rpois(n*ntimes, y.hat)))
@@ -94,7 +95,7 @@ pop.decline <- function(df, ntimes){
   end.date <- cat("Predicted Extinction: ", mean(end.dates))
   #####
   
-  #create plot with each model fit
+  #Create plot with each model fit
   plot1 <- ggplot(data = df, aes(x = Year, y = Population)) +
     geom_point() +
     geom_smooth(method='glm',formula=y~x, method.args = list(family = "poisson"), 
@@ -102,14 +103,19 @@ pop.decline <- function(df, ntimes){
     geom_smooth(method='glm',formula=y~x, aes(color = "Linear")) + 
     geom_smooth(method='glm.nb',formula=y~x, aes(color = "Neg.Bi")) +
     scale_colour_manual(name="legend", values=c("orange", "green", "purple")) +
-    labs(x = "Year", y = "Population")
+    labs(x = "Year", y = "Population") +
+    theme(legend.position="bottom") + 
+    theme(legend.text = element_text(size = 5)) + 
+    theme(legend.title = element_text(size = 8)) 
   #####
   
-  #create residual plot for lowest aic model
-  aug.best_model <- augment(best_model)
-  resid.plot1 <- ggplot(aug.best_model, aes(x = .fitted, y = .resid)) +
-    geom_point()
+  #Create residual plot for lowest aic model
+  resid.plot <- qplot(best.model$fitted.values, best.model$residuals) + 
+    geom_hline(yintercept=0) +
+    labs(x = "Fitted Values", y = "Residuals")
+  #####
   
+  #Create function to neatly display plots
   print_plots <- function(x, y){
     par(mfrow = c(2,2))
       print(x)
@@ -117,8 +123,8 @@ pop.decline <- function(df, ntimes){
   }
   #####
   
-  #return aics, predicted extinction, plots
-  print(list(aic_summary, end.date, print_plots(plot1, resid.plot1)))
+  #Return aics, extinction, plots
+  invisible(list(aic.summary, end.date, print_plots(plot1, resid.plot)))
 }
 ```
 
@@ -128,37 +134,40 @@ pop.decline(df = whale, ntimes = 100)
 
 As outlined above, the function will return a list of each model's AIC, predicted extinction, and 2 plots:
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=3.8, fig.height=4}
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=3.5, fig.height=2.5}
 library(tidyverse)
 library(here)
 library(MASS)
-library(broom)
-library(rsample)
+
 whale <- read_csv(here("data", "sperm_whale_pop.csv"))
 addax <- read_csv(here("data", "addax.csv"))
 grizzly_ukraine <- read_csv(here("data", "grizzly_ukraine.csv"))
 ringed_seal <- read_csv(here("data", "ringed_seal_finland.csv"))
+
+set.seed(333)
 pop.decline(df = whale, ntimes = 100)
 ```
 
-So, for the sperm whale, simulation is done via negative binomial glm regression, and predicted extincion is around the year 2114. This prediction is many years into the future, so we are extrapolating. However, it is still worth investigating the notion of a predicted extinction. 
+So, for the sperm whale, simulation is done via negative binomial glm regression, and predicting extinction to occur around the year 2114. This prediction is many years into the future, so we are extrapolating. However, it is still worth investigating the notion of a predicted extinction. 
 
 ## Example Using Addax Data
 
-As a supplemental example, we repeat the above process for a data set containing population values for addax. 
+As a supplemental example, we repeat the above process for a data set containing population values for addax, a member of the antelope family residing in the Sahara Desert. 
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=3.8, fig.height=4}
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=3.5, fig.height=2.5}
+set.seed(333)
 pop.decline(df = addax, ntimes = 100)
 ```
 
+For the addax, simulation is done via a linear model (Gaussian family) with predicted extinction around the year 1990. While this model is incorrect in its prediction, it is currently [estimated](https://www.livescience.com/55277-addax.html) that only 3 remain in the wild. Additionally, my model's estimation has little information to use, with the provided data set only contain three data points. 
 
 ## Future Work
 
-Although my function runs quickly and produces seemingly reasonable estimates, there is always room for improvement. In this section, I will outline several ideas that I had attempted to implement but abandonded after spending a disproportionate amount of time that seemed to be beyond the scope of this course. 
+Although my function runs quickly and produces seemingly reasonable estimates, there is always room for improvement. In this section, I will outline several ideas that could lead to a more robust, informative analysis for a project of larger scope.
 
-In simulating new values based on the best model, I utilized the `apply()` function. I initially had employed for loops, but ran timing experiments (found in Week 10 Tasks.Rmd) and found that the apply function was considerably faster. I had hoped to use `map()`, but found that a by-column iteration of a function over columns of a matrix may not be within the scope of the purrr library (https://github.com/tidyverse/purrr/issues/341). 
+In simulating new values based on the best model, I utilized the `apply()` function. I initially had employed for loops, but ran timing experiments (found in [Week 10 Tasks.Rmd](https://github.com/ST541-Fall2018/boydpe-project-populationdecline/blob/master/Weekly%20R%20files/Week_Ten_Tasks.pdf)) and found that the apply function was considerably faster. I had hoped to use `map()`, but found a [discussion](https://github.com/tidyverse/purrr/issues/341) suggesting that a by-column iteration of a function over columns of a matrix may not be within the scope of the purrr library. 
 
-I had attempted a more rigorous simulation methodology, but eventually abandoned the attempt after spending many hours that did not yield an accurate solution. In this approach, I tried to follow the following steps:
+I had later attempted a more rigorous simulation methodology (found in [Second Prediction Attempt.R](https://github.com/ST541-Fall2018/boydpe-project-populationdecline/blob/master/Extra%20Work%20and%20Checks/Second%20Prediction%20Attempt.R)), but eventually abandoned the attempt after spending many hours that did not yield an accurate solution. The output would only converge to a nonzero value, producing the same predicted value every year for thousands of years in a row. In this approach, I tried to follow the following steps:
 
 - use original data to fit a model
 - simiulate data from fitted values
@@ -166,7 +175,7 @@ I had attempted a more rigorous simulation methodology, but eventually abandoned
 - find the average of these predicted values and  assume that this average will be the next "observed" value
 - repeat this process as long as the predicted population is above 1
 
-Unfortunately, this process proved to be too taxing with the other components of my already existing work. 
+Although I had hoped to include this implementation in my project, it was a supplementary prediction approach and can be continued at a later point for additional practice. 
 
 ## Conclusions
 

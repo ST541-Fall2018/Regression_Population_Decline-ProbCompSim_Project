@@ -1,9 +1,13 @@
 # Peter Boyd
 # Modeling Population Decline Function
 
+# The following packages are required:
+library(tidyverse)
+library(here)
+library(MASS)
 
 pop.decline <- function(df, ntimes){
-  #fit several models
+  #Fit several models
   df <- na.omit(df)
   fit.glm <- glm(df$Population ~ df$Year, data = df)
   fit.poi <- glm(df$Population ~ df$Year, data = df, family = "poisson")
@@ -11,23 +15,23 @@ pop.decline <- function(df, ntimes){
   fits <- list((fit.glm), (fit.poi), (fit.nb))
   #####
   
-  #compare AIC
+  #Compare AIC
   mods <- c("Linear Model", "Poisson", "Negative Binomial")
   aics <- c(summary(fit.glm)$aic, summary(fit.poi)$aic, summary(fit.nb)$aic)
-  best_model <- fits[[order(aics)[1]]]
-  aic_summary <- cat("AIC for Each Model", "\n",
+  best.model <- fits[[order(aics)[1]]]
+  aic.summary <- cat("AIC for Each Model", "\n",
                      mods[1], ": ", aics[1], "\n", 
                      mods[2], ": ", aics[2], "\n",
                      mods[3], ": ", aics[3], "\n")
   #####
   
-  # do simulation for lowest aic
-  # first, select best model and simulate accordingly
-  # then, fit models to each simulation
-  # finally, average the models to obtain an approximate 
-  # estimate of extinction date
+  # Do simulation for lowest aic
+  # First, select best model and simulate accordingly
+  # Then, fit models to each simulation
+  # Finally, average the models to obtain an approximate 
+  # Estimate of extinction date
   n <- max(df$Year) - min(df$Year) +1
-  y.hat <- best_model$fitted.values
+  y.hat <- best.model$fitted.values
   
   if(order(aics)[1] == 2){
     y.rep <- matrix(ncol = ntimes, data = c(rpois(n*ntimes, y.hat)))
@@ -49,7 +53,7 @@ pop.decline <- function(df, ntimes){
   end.date <- cat("Predicted Extinction: ", mean(end.dates))
   #####
   
-  #create plot with each model fit
+  #Create plot with each model fit
   plot1 <- ggplot(data = df, aes(x = Year, y = Population)) +
     geom_point() +
     geom_smooth(method='glm',formula=y~x, method.args = list(family = "poisson"), 
@@ -57,13 +61,19 @@ pop.decline <- function(df, ntimes){
     geom_smooth(method='glm',formula=y~x, aes(color = "Linear")) + 
     geom_smooth(method='glm.nb',formula=y~x, aes(color = "Neg.Bi")) +
     scale_colour_manual(name="legend", values=c("orange", "green", "purple")) +
-    labs(x = "Year", y = "Population")
+    labs(x = "Year", y = "Population") + 
+    theme(legend.position="bottom") + 
+    theme(legend.text = element_text(size = 5)) + 
+    theme(legend.title = element_text(size = 8)) 
   #####
   
-  #create plot for lowest aic model
-  aug.best_model <- augment(best_model)
-  resid.plot1 <- ggplot(aug.best_model, aes(x = .fitted, y = .resid)) +
-    geom_point()
+  #Create plot for lowest aic model
+  resid.plot <- qplot(best.model$fitted.values, best.model$residuals) + 
+    geom_hline(yintercept=0) +
+    labs(x = "Fitted Values", y = "Residuals")
+  #####
+  
+  #Create function to neatly display plots
   
   print_plots <- function(x, y){
     {par(mfrow = c(1,2))
@@ -72,6 +82,6 @@ pop.decline <- function(df, ntimes){
   }
   #####
   
-  #return aics, predicted extinction, plots
-  return(list(aic_summary, end.date, print_plots(plot1, resid.plot1)))
+  #Return aics, predicted extinction, plots
+  invisible(list(aic.summary, end.date, print_plots(plot1, resid.plot1)))
 }

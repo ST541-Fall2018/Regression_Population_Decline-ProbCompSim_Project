@@ -2,7 +2,9 @@
 title: "Week Five Tasks"
 author: "Peter Boyd"
 date: "10/25/2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 This week was mostly focused on reading and research; the notes I took on my findings are contained within an Issue. 
@@ -11,7 +13,8 @@ This week was mostly focused on reading and research; the notes I took on my fin
 I think that I will use the data below for simulation. 
 
 ```{r}
+library(tidyverse)
+library(here)
 whale <- read_csv(here("data", "sperm_whale_pop.csv"))
-whale
 ```
 
